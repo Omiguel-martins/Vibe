@@ -1,11 +1,31 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { products as mockProducts } from '../data/products'
+import { productImages } from '../data/productImages'
 import { supabase, isSupabaseConfigured } from '../services/supabase'
 
 const ProductContext = createContext(null)
 
+const imageSlugMap = {
+  'vibe-boa-menina': productImages.boaMenina,
+  'vibe-rosa-da-manha': productImages.rosaDaManha,
+  'vibe-invencivel': productImages.invencivel,
+  'vibe-combo-colecao-completa': productImages.comboTrio,
+}
+
+function resolveProductImage(slug, itemImage) {
+  if (imageSlugMap[slug]) {
+    return imageSlugMap[slug]
+  }
+  if (itemImage && !itemImage.startsWith('/products/')) {
+    return itemImage
+  }
+  return productImages.boaMenina
+}
+
 function normalizeProduct(item) {
   if (!item) return null
+  const defaultImg = resolveProductImage(item.slug, item.thumbnail)
+  
   return {
     ...item,
     price: Number(item.price),
@@ -13,10 +33,10 @@ function normalizeProduct(item) {
     original_price: item.original_price !== undefined ? Number(item.original_price) : Number(item.originalPrice),
     longDescription: item.longDescription || item.long_description || item.description,
     long_description: item.long_description || item.longDescription || item.description,
-    images: Array.isArray(item.images) && item.images.length > 0 
+    images: Array.isArray(item.images) && item.images.length > 0 && !item.images[0].startsWith('/products/')
       ? item.images 
-      : [item.thumbnail || 'https://images.unsplash.com/photo-1563170351-be82bc888aa4?w=600&q=85'],
-    thumbnail: item.thumbnail || (Array.isArray(item.images) ? item.images[0] : ''),
+      : [defaultImg],
+    thumbnail: defaultImg,
     notes: typeof item.notes === 'string' ? JSON.parse(item.notes) : (item.notes || { top: [], heart: [], base: [] })
   }
 }
@@ -40,7 +60,7 @@ export function ProductProvider({ children }) {
           if (sbError) throw sbError
           setProducts((data || []).map(normalizeProduct))
         } else {
-          await new Promise((r) => setTimeout(r, 300))
+          await new Promise((r) => setTimeout(r, 200))
           setProducts(mockProducts.map(normalizeProduct))
         }
       } catch (err) {

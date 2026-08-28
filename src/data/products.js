@@ -1,3 +1,5 @@
+import { productImages } from './productImages'
+
 export const products = [
   {
     id: "1",
@@ -21,8 +23,8 @@ export const products = [
     badge: "DESTAQUE",
     featured: true,
     collection: "Boa Menina",
-    images: ["/products/vibe-boa-menina.jpg"],
-    thumbnail: "/products/vibe-boa-menina.jpg",
+    images: [productImages.boaMenina],
+    thumbnail: productImages.boaMenina,
   },
   {
     id: "2",
@@ -46,8 +48,8 @@ export const products = [
     badge: "NOVO",
     featured: false,
     collection: "Rosa da Manhã",
-    images: ["/products/vibe-rosa-da-manha.jpg"],
-    thumbnail: "/products/vibe-rosa-da-manha.jpg",
+    images: [productImages.rosaDaManha],
+    thumbnail: productImages.rosaDaManha,
   },
   {
     id: "3",
@@ -71,8 +73,8 @@ export const products = [
     badge: "NOVO",
     featured: false,
     collection: "Invencível",
-    images: ["/products/vibe-invencivel.jpg"],
-    thumbnail: "/products/vibe-invencivel.jpg",
+    images: [productImages.invencivel],
+    thumbnail: productImages.invencivel,
   },
   {
     id: "4",
@@ -96,8 +98,8 @@ export const products = [
     badge: "LANÇAMENTO",
     featured: false,
     collection: "Combos",
-    images: ["/products/vibe-combo-trio.jpg"],
-    thumbnail: "/products/vibe-combo-trio.jpg",
+    images: [productImages.comboTrio],
+    thumbnail: productImages.comboTrio,
   },
 ];
 
