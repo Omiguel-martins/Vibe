@@ -1,4 +1,4 @@
-import { productImages } from './productImages'
+const SUPABASE_STORAGE_URL = 'https://xjbljfnmgcydwwxvbxwj.supabase.co/storage/v1/object/public/products';
 
 export const products = [
   {
@@ -23,8 +23,8 @@ export const products = [
     badge: "DESTAQUE",
     featured: true,
     collection: "Boa Menina",
-    images: [productImages.boaMenina],
-    thumbnail: productImages.boaMenina,
+    images: [`${SUPABASE_STORAGE_URL}/vibe-boa-menina.jpg`],
+    thumbnail: `${SUPABASE_STORAGE_URL}/vibe-boa-menina.jpg`,
   },
   {
     id: "2",
@@ -48,8 +48,8 @@ export const products = [
     badge: "NOVO",
     featured: false,
     collection: "Rosa da Manhã",
-    images: [productImages.rosaDaManha],
-    thumbnail: productImages.rosaDaManha,
+    images: [`${SUPABASE_STORAGE_URL}/vibe-rosa-da-manha.jpg`],
+    thumbnail: `${SUPABASE_STORAGE_URL}/vibe-rosa-da-manha.jpg`,
   },
   {
     id: "3",
@@ -73,8 +73,8 @@ export const products = [
     badge: "NOVO",
     featured: false,
     collection: "Invencível",
-    images: [productImages.invencivel],
-    thumbnail: productImages.invencivel,
+    images: [`${SUPABASE_STORAGE_URL}/vibe-invencivel.jpg`],
+    thumbnail: `${SUPABASE_STORAGE_URL}/vibe-invencivel.jpg`,
   },
   {
     id: "4",
@@ -98,8 +98,8 @@ export const products = [
     badge: "LANÇAMENTO",
     featured: false,
     collection: "Combos",
-    images: [productImages.comboTrio],
-    thumbnail: productImages.comboTrio,
+    images: [`${SUPABASE_STORAGE_URL}/vibe-combo-trio.jpg`],
+    thumbnail: `${SUPABASE_STORAGE_URL}/vibe-combo-trio.jpg`,
   },
 ];
 

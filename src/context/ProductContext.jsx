@@ -1,30 +1,31 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { products as mockProducts } from '../data/products'
-import { productImages } from '../data/productImages'
 import { supabase, isSupabaseConfigured } from '../services/supabase'
 
 const ProductContext = createContext(null)
 
-const imageSlugMap = {
-  'vibe-boa-menina': productImages.boaMenina,
-  'vibe-rosa-da-manha': productImages.rosaDaManha,
-  'vibe-invencivel': productImages.invencivel,
-  'vibe-combo-colecao-completa': productImages.comboTrio,
+const SUPABASE_STORAGE_URL = 'https://xjbljfnmgcydwwxvbxwj.supabase.co/storage/v1/object/public/products';
+
+const slugToStorageMap = {
+  'vibe-boa-menina': `${SUPABASE_STORAGE_URL}/vibe-boa-menina.jpg`,
+  'vibe-rosa-da-manha': `${SUPABASE_STORAGE_URL}/vibe-rosa-da-manha.jpg`,
+  'vibe-invencivel': `${SUPABASE_STORAGE_URL}/vibe-invencivel.jpg`,
+  'vibe-combo-colecao-completa': `${SUPABASE_STORAGE_URL}/vibe-combo-trio.jpg`,
 }
 
-function resolveProductImage(slug, itemImage) {
-  if (imageSlugMap[slug]) {
-    return imageSlugMap[slug]
+function resolveImageUrl(slug, url) {
+  if (url && (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:'))) {
+    return url;
   }
-  if (itemImage && !itemImage.startsWith('/products/')) {
-    return itemImage
+  if (slugToStorageMap[slug]) {
+    return slugToStorageMap[slug];
   }
-  return productImages.boaMenina
+  return `${SUPABASE_STORAGE_URL}/vibe-boa-menina.jpg`;
 }
 
 function normalizeProduct(item) {
   if (!item) return null
-  const defaultImg = resolveProductImage(item.slug, item.thumbnail)
+  const defaultImg = resolveImageUrl(item.slug, item.thumbnail)
   
   return {
     ...item,
@@ -33,7 +34,7 @@ function normalizeProduct(item) {
     original_price: item.original_price !== undefined ? Number(item.original_price) : Number(item.originalPrice),
     longDescription: item.longDescription || item.long_description || item.description,
     long_description: item.long_description || item.longDescription || item.description,
-    images: Array.isArray(item.images) && item.images.length > 0 && !item.images[0].startsWith('/products/')
+    images: Array.isArray(item.images) && item.images.length > 0 && (item.images[0].startsWith('http') || item.images[0].startsWith('data:'))
       ? item.images 
       : [defaultImg],
     thumbnail: defaultImg,
