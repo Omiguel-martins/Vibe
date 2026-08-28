@@ -30,7 +30,7 @@ export function CartDrawer() {
   const shipping = subtotal >= 150 ? 0 : 18.9
   const total = subtotal + (isEmpty ? 0 : shipping)
 
-  // ── Gerador de Mensagem do WhatsApp ─────────────────────────
+  // ── Gerador de Mensagem do WhatsApp (Texto Puro, sem emojis) ─
   const handleCheckoutWhatsApp = () => {
     if (isEmpty) return
 
@@ -38,19 +38,19 @@ export function CartDrawer() {
 
     if (items.length === 1) {
       const singleItem = items[0]
-      const qtyStr = singleItem.quantity > 1 ? `${singleItem.quantity} unidades do ` : 'um '
+      const qtyStr = singleItem.quantity > 1 ? `${singleItem.quantity}x ` : '1x '
       messageText = `Olá, eu gostaria de comprar ${qtyStr}Body Splash ${singleItem.name} ${singleItem.subtitle}.\n\n`
     } else {
       messageText = `Olá, eu gostaria de comprar os seguintes produtos:\n\n`
       items.forEach((item) => {
-        messageText += `• ${item.quantity}x Body Splash ${item.name} ${item.subtitle} (${formatCurrency(item.price * item.quantity)})\n`
+        messageText += `- ${item.quantity}x Body Splash ${item.name} ${item.subtitle} (${formatCurrency(item.price * item.quantity)})\n`
       })
       messageText += `\n`
     }
 
-    messageText += `💰 Valor Total: ${formatCurrency(total)}\n`
+    messageText += `Valor Total: ${formatCurrency(total)}\n`
     if (shipping === 0) {
-      messageText += `🚚 Frete: Grátis\n`
+      messageText += `Frete: Grátis\n`
     }
     messageText += `\nComo posso prosseguir com o pagamento e entrega?`
 
