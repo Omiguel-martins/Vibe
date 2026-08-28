@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, Heart, Share2, ShoppingBag, CheckCircle, Truck, Sparkles } from 'lucide-react'
+import { ArrowLeft, Heart, Share2, ShoppingBag, CheckCircle, Sparkles } from 'lucide-react'
 import { useProducts } from '../context/ProductContext'
 import { useCart } from '../context/CartContext'
 import { ProductGallery } from '../components/product/ProductGallery'
@@ -44,6 +44,7 @@ export function ProductPage() {
     setTimeout(() => setAdded(false), 2200)
   }
 
+  // ── Loading ────────────────────────────────────────────────
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -52,6 +53,7 @@ export function ProductPage() {
     )
   }
 
+  // ── Not found ──────────────────────────────────────────────
   if (!product) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 px-8 text-center">
@@ -66,9 +68,11 @@ export function ProductPage() {
   return (
     <div className="bg-[#F8F6F2]">
 
+      {/* ── Breadcrumb & Top bar (Desktop & Mobile) ─────────── */}
       <div className="border-b border-[#DDD8D0] bg-white/80 backdrop-blur-md">
         <div className="max-w-7xl 2xl:max-w-[1550px] mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 h-12 2xl:h-14 flex items-center justify-between">
           
+          {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-xs 2xl:text-sm font-inter text-[#5C5248]">
             <Link to="/" className="hover:text-[#A8793C] transition-colors flex items-center gap-1">
               <ArrowLeft size={14} />
@@ -78,6 +82,7 @@ export function ProductPage() {
             <span className="text-[#A8793C] truncate font-medium">{product.subtitle}</span>
           </div>
 
+          {/* Ações: Favorito + Compartilhar */}
           <div className="flex items-center gap-2">
             <button
               onClick={() => setFavorited((f) => !f)}
@@ -103,15 +108,19 @@ export function ProductPage() {
         </div>
       </div>
 
+      {/* ── Container do Produto (Grid 2 Colunas Desktop) ───── */}
       <div className="max-w-7xl 2xl:max-w-[1550px] mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 py-8 md:py-12 2xl:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 2xl:gap-20 items-start">
 
-          <div className="lg:col-span-6 lg:sticky lg:top-[135px]">
+          {/* ── Coluna Esquerda: Galeria de Fotos ──────────────── */}
+          <div className="lg:col-span-6 lg:sticky lg:top-[110px]">
             <ProductGallery images={product.images} name={`${product.name} ${product.subtitle}`} />
           </div>
 
+          {/* ── Coluna Direita: Informações & Compra ───────────── */}
           <div className="lg:col-span-6 flex flex-col">
 
+            {/* Badge & Coleção */}
             <div className="flex items-center gap-2.5 mb-3">
               {product.badge && (
                 <Badge variant={badgeVariantMap[product.badge] || 'gold'}>
@@ -123,6 +132,7 @@ export function ProductPage() {
               </span>
             </div>
 
+            {/* Nome do Produto */}
             <h1 style={{ fontFamily: '"Playfair Display", serif' }}>
               <span className="block text-xs sm:text-sm 2xl:text-base tracking-[0.35em] text-[#A8793C] uppercase font-inter font-semibold mb-1">
                 {product.name}
@@ -132,6 +142,7 @@ export function ProductPage() {
               </span>
             </h1>
 
+            {/* Tagline Poética */}
             <p
               className="text-[#5C5248] text-base sm:text-lg 2xl:text-xl mt-3 2xl:mt-4 italic leading-relaxed"
               style={{ fontFamily: '"Cormorant Garamond", serif' }}
@@ -139,6 +150,7 @@ export function ProductPage() {
               "{product.tagline}"
             </p>
 
+            {/* Bloco de Preço */}
             <div className="mt-6 2xl:mt-8 p-4 sm:p-6 bg-white border border-[#DDD8D0] shadow-2xs">
               <div className="flex items-baseline gap-3">
                 <span className="text-3xl sm:text-4xl 2xl:text-5xl font-inter font-semibold gradient-gold">
@@ -160,11 +172,13 @@ export function ProductPage() {
               </p>
             </div>
 
+            {/* Informações do Frasco / Estoque */}
             <div className="flex items-center justify-between py-3.5 border-b border-[#DDD8D0] text-xs 2xl:text-sm font-inter text-[#5C5248]">
               <span className="tracking-wider uppercase">Volume: <strong className="text-[#1C1916]">{product.volume}</strong></span>
-              <span className="text-emerald-700 font-medium">✓ Em estoque pronto para envio</span>
+              <span className="text-emerald-700 font-medium">✓ Disponível para Pronta Entrega</span>
             </div>
 
+            {/* ── Seletor de Quantidade & Botão Desktop ─────────── */}
             <div className="mt-6 2xl:mt-8 flex flex-col sm:flex-row items-stretch gap-3 2xl:gap-4">
               <div className="flex items-center gap-3">
                 <span className="text-xs tracking-widest text-[#5C5248] uppercase font-inter sm:hidden">
@@ -195,18 +209,22 @@ export function ProductPage() {
               </Button>
             </div>
 
+            {/* Benefícios Rápidos */}
             <div className="grid grid-cols-2 gap-3 mt-6 pt-4 border-t border-[#DDD8D0]">
-              <div className="flex items-center gap-2 text-xs 2xl:text-sm font-inter text-[#5C5248]">
-                <Truck size={16} className="text-[#A8793C] shrink-0" />
-                <span>Frete Grátis acima de R$ 150</span>
-              </div>
               <div className="flex items-center gap-2 text-xs 2xl:text-sm font-inter text-[#5C5248]">
                 <Sparkles size={16} className="text-[#A8793C] shrink-0" />
                 <span>Partículas iluminadoras</span>
               </div>
+              <div className="flex items-center gap-2 text-xs 2xl:text-sm font-inter text-[#5C5248]">
+                <CheckCircle size={16} className="text-[#A8793C] shrink-0" />
+                <span>Alta Fixação na Pele</span>
+              </div>
             </div>
 
+            {/* ── Abas de Conteúdo Detalhado ────────────────────── */}
             <div className="mt-10 2xl:mt-12">
+              
+              {/* Cabeçalho das Abas */}
               <div className="flex border-b border-[#DDD8D0]">
                 {[
                   { id: 'description', label: 'Descrição' },
@@ -227,7 +245,10 @@ export function ProductPage() {
                 ))}
               </div>
 
+              {/* Conteúdo da Aba */}
               <div className="pt-6 pb-2">
+                
+                {/* Descrição */}
                 {activeTab === 'description' && (
                   <div className="fade-in-up space-y-4">
                     <p className="text-sm sm:text-base 2xl:text-lg text-[#5C5248] font-inter leading-relaxed">
@@ -239,6 +260,7 @@ export function ProductPage() {
                   </div>
                 )}
 
+                {/* Notas Olfativas */}
                 {activeTab === 'notes' && (
                   <div className="fade-in-up">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 2xl:gap-4">
@@ -267,6 +289,7 @@ export function ProductPage() {
                   </div>
                 )}
 
+                {/* Especificações */}
                 {activeTab === 'details' && (
                   <div className="fade-in-up bg-white border border-[#DDD8D0] divide-y divide-[#DDD8D0] shadow-2xs">
                     {[
@@ -292,6 +315,7 @@ export function ProductPage() {
         </div>
       </div>
 
+      {/* ── Fixed bottom CTA (Apenas no Mobile) ───────────────── */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-30 px-5 py-3 bg-white/95 backdrop-blur-md border-t border-[#DDD8D0] shadow-lg pb-safe">
         <Button
           variant="primary"

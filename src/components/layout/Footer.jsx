@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ShieldCheck, Truck, RefreshCw, Mail, MessageCircle, Globe } from 'lucide-react'
+import { ShieldCheck, Sparkles, RefreshCw, Mail, MessageCircle, Globe } from 'lucide-react'
 
 export function Footer() {
   return (
@@ -10,14 +10,14 @@ export function Footer() {
           
           <div className="flex items-center justify-center md:justify-start gap-4 2xl:gap-5">
             <div className="w-12 h-12 2xl:w-14 2xl:h-14 border border-[#A8793C]/30 bg-white flex items-center justify-center shrink-0">
-              <Truck size={22} className="text-[#A8793C]" />
+              <Sparkles size={22} className="text-[#A8793C]" />
             </div>
             <div>
               <h4 className="text-xs 2xl:text-sm font-inter font-semibold uppercase tracking-wider text-[#1C1916]">
-                Entrega para todo o Brasil
+                Atendimento Personalizado
               </h4>
               <p className="text-xs 2xl:text-sm text-[#5C5248]/80 font-inter mt-0.5">
-                Frete grátis em pedidos acima de R$ 150
+                Faça seu pedido diretamente pelo WhatsApp
               </p>
             </div>
           </div>
@@ -90,10 +90,10 @@ export function Footer() {
             Atendimento
           </h4>
           <ul className="space-y-2.5 text-xs 2xl:text-sm font-inter text-[#5C5248]">
+            <li>WhatsApp: (66) 98133-8837</li>
             <li>Segunda a Sexta das 09h às 18h</li>
             <li>contato@vibefragrances.com.br</li>
             <li>Dúvidas Frequentes</li>
-            <li>Política de Envio e Devolução</li>
           </ul>
         </div>
 
@@ -108,10 +108,10 @@ export function Footer() {
             <a href="#" aria-label="Website oficial" className="w-9 h-9 2xl:w-10 2xl:h-10 border border-[#DDD8D0] flex items-center justify-center text-[#5C5248] hover:text-[#A8793C] hover:border-[#A8793C] transition-colors">
               <Globe size={16} />
             </a>
-            <a href="#" aria-label="WhatsApp / Chat" className="w-9 h-9 2xl:w-10 2xl:h-10 border border-[#DDD8D0] flex items-center justify-center text-[#5C5248] hover:text-[#A8793C] hover:border-[#A8793C] transition-colors">
+            <a href="https://wa.me/5566981338837" target="_blank" rel="noreferrer" aria-label="WhatsApp" className="w-9 h-9 2xl:w-10 2xl:h-10 border border-[#DDD8D0] flex items-center justify-center text-[#5C5248] hover:text-[#A8793C] hover:border-[#A8793C] transition-colors">
               <MessageCircle size={16} />
             </a>
-            <a href="#" aria-label="E-mail" className="w-9 h-9 2xl:w-10 2xl:h-10 border border-[#DDD8D0] flex items-center justify-center text-[#5C5248] hover:text-[#A8793C] hover:border-[#A8793C] transition-colors">
+            <a href="mailto:contato@vibefragrances.com.br" aria-label="E-mail" className="w-9 h-9 2xl:w-10 2xl:h-10 border border-[#DDD8D0] flex items-center justify-center text-[#5C5248] hover:text-[#A8793C] hover:border-[#A8793C] transition-colors">
               <Mail size={16} />
             </a>
           </div>
