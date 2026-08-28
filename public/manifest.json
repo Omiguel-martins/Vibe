@@ -1,0 +1,10 @@
+{
+  "name": "VIBE · Perfumaria Premium",
+  "short_name": "VIBE",
+  "description": "Fragrâncias exclusivas para mulheres que marcam presença.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8F6F2",
+  "theme_color": "#F8F6F2",
+  "orientation": "portrait"
+}
