@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react'
-import { X, ShoppingBag, ArrowRight } from 'lucide-react'
+import { X, ShoppingBag, MessageCircle, ArrowLeft } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 import { CartItem } from './CartItem'
 import { Button } from '../ui/Button'
 import { formatCurrency } from '../../utils/cn'
+
+const WHATSAPP_NUMBER = '5566981338837'
 
 export function CartDrawer() {
   const { isOpen, setIsOpen, items, isEmpty, subtotal, clearCart } = useCart()
@@ -26,16 +28,49 @@ export function CartDrawer() {
   if (!isOpen) return null
 
   const shipping = subtotal >= 150 ? 0 : 18.9
-  const total = subtotal + shipping
+  const total = subtotal + (isEmpty ? 0 : shipping)
+
+  // ── Gerador de Mensagem do WhatsApp ─────────────────────────
+  const handleCheckoutWhatsApp = () => {
+    if (isEmpty) return
+
+    let messageText = ''
+
+    if (items.length === 1) {
+      const singleItem = items[0]
+      const qtyStr = singleItem.quantity > 1 ? `${singleItem.quantity} unidades do ` : 'um '
+      messageText = `Olá, eu gostaria de comprar ${qtyStr}Body Splash ${singleItem.name} ${singleItem.subtitle}.\n\n`
+    } else {
+      messageText = `Olá, eu gostaria de comprar os seguintes produtos:\n\n`
+      items.forEach((item) => {
+        messageText += `• ${item.quantity}x Body Splash ${item.name} ${item.subtitle} (${formatCurrency(item.price * item.quantity)})\n`
+      })
+      messageText += `\n`
+    }
+
+    messageText += `💰 Valor Total: ${formatCurrency(total)}\n`
+    if (shipping === 0) {
+      messageText += `🚚 Frete: Grátis\n`
+    }
+    messageText += `\nComo posso prosseguir com o pagamento e entrega?`
+
+    const encodedMessage = encodeURIComponent(messageText)
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`
+
+    // Abre o WhatsApp em uma nova aba
+    window.open(whatsappUrl, '_blank')
+  }
 
   return (
     <div className="fixed inset-0 z-50">
+      {/* Overlay */}
       <div
         className="absolute inset-0 drawer-overlay fade-in"
         onClick={() => setIsOpen(false)}
         aria-hidden="true"
       />
 
+      {/* Drawer Panel */}
       <div
         ref={drawerRef}
         role="dialog"
@@ -44,6 +79,7 @@ export function CartDrawer() {
         className="absolute right-0 top-0 bottom-0 w-full max-w-sm md:max-w-md bg-[#F8F6F2] flex flex-col border-l border-[#DDD8D0] shadow-2xl"
         style={{ animation: 'slideInRight 0.3s ease' }}
       >
+        {/* Header */}
         <div className="flex items-center justify-between px-6 h-16 border-b border-[#DDD8D0] bg-white">
           <div className="flex items-center gap-2.5">
             <ShoppingBag size={20} className="text-[#A8793C]" />
@@ -53,13 +89,14 @@ export function CartDrawer() {
           </div>
           <button
             onClick={() => setIsOpen(false)}
-            className="w-8 h-8 flex items-center justify-center text-[#5C5248] hover:text-[#1C1916] transition-colors"
+            className="w-8 h-8 flex items-center justify-center text-[#5C5248] hover:text-[#1C1916] transition-colors cursor-pointer"
             aria-label="Fechar carrinho"
           >
             <X size={18} />
           </button>
         </div>
 
+        {/* Content */}
         <div className="flex-1 overflow-y-auto px-6 no-scrollbar">
           {isEmpty ? (
             <div className="h-full flex flex-col items-center justify-center gap-4 text-center py-16">
@@ -75,8 +112,13 @@ export function CartDrawer() {
               <p className="text-xs text-[#5C5248]/70 font-inter tracking-wide">
                 Descubra nossas fragrâncias exclusivas
               </p>
-              <Button variant="secondary" size="sm" onClick={() => setIsOpen(false)} className="mt-2">
-                Ver Coleção
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setIsOpen(false)}
+                className="mt-2"
+              >
+                Explorar Coleção
               </Button>
             </div>
           ) : (
@@ -85,13 +127,14 @@ export function CartDrawer() {
                 <CartItem key={item.id} item={item} />
               ))}
 
-              <div className="py-3.5 mt-2 bg-white/70 border border-[#DDD8D0]/60 p-3 rounded-none">
+              {/* Aviso de Frete */}
+              <div className="py-3.5 mt-3 bg-white border border-[#DDD8D0] p-3 text-center">
                 {shipping === 0 ? (
-                  <p className="text-xs text-[#A8793C] text-center font-inter font-semibold">
+                  <p className="text-xs text-[#A8793C] font-inter font-semibold">
                     ✓ Parabéns! Você ganhou Frete Grátis
                   </p>
                 ) : (
-                  <p className="text-xs text-[#5C5248] text-center font-inter">
+                  <p className="text-xs text-[#5C5248] font-inter">
                     Faltam apenas{' '}
                     <strong className="text-[#A8793C] font-semibold">
                       {formatCurrency(150 - subtotal)}
@@ -104,9 +147,10 @@ export function CartDrawer() {
           )}
         </div>
 
+        {/* Footer Summary & Ações */}
         {!isEmpty && (
-          <div className="border-t border-[#DDD8D0] bg-white px-6 py-6 space-y-3.5">
-            <div className="space-y-2">
+          <div className="border-t border-[#DDD8D0] bg-white px-6 py-5 space-y-3">
+            <div className="space-y-1.5">
               <div className="flex justify-between text-sm font-inter text-[#5C5248]">
                 <span>Subtotal</span>
                 <span>{formatCurrency(subtotal)}</span>
@@ -127,14 +171,32 @@ export function CartDrawer() {
               </div>
             </div>
 
-            <Button variant="primary" size="xl" className="mt-2 py-4">
-              <span>Finalizar Pedido</span>
-              <ArrowRight size={16} />
+            {/* Botão Principal: WhatsApp */}
+            <Button
+              variant="primary"
+              size="xl"
+              onClick={handleCheckoutWhatsApp}
+              className="mt-2 py-4 bg-[#25D366] hover:bg-[#1EBE5B] text-white border-transparent flex items-center justify-center gap-2 cursor-pointer shadow-md"
+            >
+              <MessageCircle size={18} />
+              <span>Finalizar Compra no WhatsApp</span>
             </Button>
 
+            {/* Botão Secundário: Continuar Comprando */}
+            <Button
+              variant="secondary"
+              size="md"
+              onClick={() => setIsOpen(false)}
+              className="w-full py-3 text-xs tracking-widest flex items-center justify-center gap-2 cursor-pointer border-[#DDD8D0] text-[#5C5248] hover:text-[#1C1916] hover:border-[#A8793C]"
+            >
+              <ArrowLeft size={14} />
+              <span>Continuar Comprando</span>
+            </Button>
+
+            {/* Limpar sacola */}
             <button
               onClick={clearCart}
-              className="w-full text-xs text-[#5C5248]/60 hover:text-red-500 transition-colors font-inter tracking-wide py-1"
+              className="w-full text-xs text-[#5C5248]/50 hover:text-red-500 transition-colors font-inter tracking-wide py-1 text-center cursor-pointer"
             >
               Limpar sacola
             </button>
